@@ -1,8 +1,8 @@
 {
   "version": 2,
-  "dgSpecHash": "qKMAg2VPyjE=",
+  "dgSpecHash": "ViRPwGDR3Fw=",
   "success": true,
-  "projectFilePath": "C:\\Users\\letin\\OneDrive\\Documents\\ImageThumbnail\\ImgThumbnailApp\\ImgThumbnailApp.Web\\ImgThumbnailApp.Web.csproj",
+  "projectFilePath": "C:\\Users\\letin\\OneDrive\\Documents\\image-thumbnail-web\\ImgThumbnailApp.Web\\ImgThumbnailApp.Web.csproj",
   "expectedPackageFiles": [
     "C:\\Users\\letin\\.nuget\\packages\\microsoft.extensions.dependencyinjection.abstractions\\8.0.0\\microsoft.extensions.dependencyinjection.abstractions.8.0.0.nupkg.sha512",
     "C:\\Users\\letin\\.nuget\\packages\\microsoft.extensions.logging.abstractions\\8.0.0\\microsoft.extensions.logging.abstractions.8.0.0.nupkg.sha512",
