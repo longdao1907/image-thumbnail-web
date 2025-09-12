@@ -5,8 +5,8 @@ options:
 
 substitutions:
   _REGION: asia-southeast1              # Region cho Artifact Registry
-  _REPO: app-image-thumbnail-auth         # Tên repository trong Artifact Registry
-  _IMAGE: image-thumbnail-auth           # Tên image
+  _REPO: app-image-thumbnail-web         # Tên repository trong Artifact Registry
+  _IMAGE: image-thumbnail-web           # Tên image
   _SCAN_SEVERITY: HIGH,CRITICAL         # Fail build nếu có các mức này
   _ARTIFACTS_BUCKET: "${PROJECT_ID}-cloudbuild-artifact"  # GCS bucket lưu báo cáo scan
   _SERVICE_NAME: "image-thumbnail-web"
