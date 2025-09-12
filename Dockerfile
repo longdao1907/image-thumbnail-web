@@ -9,21 +9,21 @@ ARG BUILD_CONFIGURATION=Release
 WORKDIR /src
 
 # Copy csproj & restore (tối ưu cache)
-COPY ["AuthAPI/AuthAPI.csproj", "AuthAPI/"]
-RUN dotnet restore "AuthAPI/AuthAPI.csproj"
+COPY ["ImgThumbnailApp.Web/ImgThumbnailApp.Web.csproj", "ImgThumbnailApp.Web/"]
+RUN dotnet restore "ImgThumbnailApp.Web/ImgThumbnailApp.Web.csproj"
 
 # Copy source còn lại và build
-WORKDIR "/src/AuthAPI"
-COPY AuthAPI/ .
-RUN dotnet build "AuthAPI.csproj" -c $BUILD_CONFIGURATION -o /app/build
+WORKDIR "/src/ImgThumbnailApp.Web"
+COPY ImgThumbnailApp.Web/ .
+RUN dotnet build "ImgThumbnailApp.Web.csproj" -c $BUILD_CONFIGURATION -o /app/build
 
 # Publish
 FROM build AS publish
 ARG BUILD_CONFIGURATION=Release
-RUN dotnet publish "AuthAPI.csproj" -c $BUILD_CONFIGURATION -o /app/publish /p:UseAppHost=false
+RUN dotnet publish "ImgThumbnailApp.Web.csproj" -c $BUILD_CONFIGURATION -o /app/publish /p:UseAppHost=false
 
 # Lấy binary cloud-sql-proxy từ image chính thức
-FROM gcr.io/cloud-sql-connectors/cloud-sql-proxy:2.11.4 AS cloudsql
+#FROM gcr.io/cloud-sql-connectors/cloud-sql-proxy:2.11.4 AS cloudsql
 
 
 # Final image
@@ -33,7 +33,7 @@ WORKDIR /app
 COPY --from=publish /app/publish .
 
 # Copy cloud-sql-proxy binary
-COPY --from=cloudsql /cloud-sql-proxy /usr/local/bin/cloud-sql-proxy
+#COPY --from=cloudsql /cloud-sql-proxy /usr/local/bin/cloud-sql-proxy
 
 # Copy entrypoint to set ASPNETCORE_URLS with $PORT
 COPY entrypoint.sh ./entrypoint.sh
