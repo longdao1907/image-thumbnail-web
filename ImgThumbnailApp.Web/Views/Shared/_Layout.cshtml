@@ -23,7 +23,7 @@
                 <div class="navbar-collapse collapse d-sm-inline-flex justify-content-between">
                     <ul class="navbar-nav flex-grow-1"> </ul>
                     <ul class="navbar-nav ">
-                        @if (!User.Identity.IsAuthenticated)
+                        @if (User.Identity == null || !User.Identity.IsAuthenticated)
                         {
                             <li class="nav-item">
                                 <a class="nav-link " asp-controller="Auth" asp-action="Login">Login</a>
@@ -35,7 +35,7 @@
                         else
                         {
                             <li class="nav-item">
-                                <a class="nav-link " href="#">Hello @User.Identity.Name</a>
+                                <a class="nav-link " href="#">Hello @User.Identity?.Name</a>
                             </li>
                             <li class="nav-item">
                                 <a class="nav-link " asp-controller="Auth" asp-action="Logout">Logout</a>

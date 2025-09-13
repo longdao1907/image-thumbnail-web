@@ -8,17 +8,17 @@ namespace ImgThumbnailApp.Web.Controllers
 {
     public class ImageController : Controller
     {
-        private readonly IImageService _imageService;   
+        private readonly IImageService _imageService;
 
         public ImageController(IImageService imageService)
         {
             _imageService = imageService;
-        }   
+        }
         public async Task<IActionResult> ImageIndex()
         {
             List<ImageMetadataDto>? list = new();
 
-            string userId = User.Claims.Where(u => u.Type == JwtRegisteredClaimNames.Sub)?.FirstOrDefault()?.Value;
+            string userId = User.Claims.Where(u => u.Type == JwtRegisteredClaimNames.Sub)?.FirstOrDefault()?.Value ?? string.Empty;
 
             ResponseDto response = await _imageService.GetImagesForUserAsync(userId);
 
@@ -46,7 +46,7 @@ namespace ImgThumbnailApp.Web.Controllers
                 return View();
             }
 
-            string userId = User.Claims.Where(u => u.Type == JwtRegisteredClaimNames.Sub)?.FirstOrDefault()?.Value;
+            string userId = User.Claims.Where(u => u.Type == JwtRegisteredClaimNames.Sub)?.FirstOrDefault()?.Value ?? string.Empty;
 
             // Basic metadata (adjust as needed)
             var metadata = new ImageMetadataDto
@@ -61,13 +61,13 @@ namespace ImgThumbnailApp.Web.Controllers
                 GcsObjectName = Guid.NewGuid().ToString(),
                 OriginalImageFile = file
             };
-            
+
 
             var response = await _imageService.AddImageAsync(metadata, metadata.UserId ?? string.Empty);
             if (response == null || !response.IsSuccess)
             {
                 ModelState.AddModelError(string.Empty, response?.Message ?? "Upload failed.");
-                TempData["error"] = response.Message;
+                TempData["error"] = response?.Message ?? "Upload failed.";
                 return View();
             }
 

@@ -32,28 +32,34 @@ namespace ImgThumbnailApp.Web.Controllers
         [HttpPost]
         public async Task<IActionResult> Login(LoginRequestDto obj)
         {
-            ResponseDto responseDto = await _authService.LoginAsync(obj);
+            ResponseDto? responseDto = await _authService.LoginAsync(obj);
 
             if (responseDto != null && responseDto.IsSuccess)
             {
-                LoginResponseDto loginResponseDto =
+                LoginResponseDto? loginResponseDto =
                     JsonSerializer.Deserialize<LoginResponseDto>(Convert.ToString(responseDto.Result) ?? string.Empty, new JsonSerializerOptions { PropertyNameCaseInsensitive = true });
+
+                if (loginResponseDto == null)
+                {
+                    TempData["error"] = "An unknown error occurred during login.";
+                    return View(obj);
+                }
+
                 try
                 {
                     await SignInUser(loginResponseDto);
                 }
-                catch (Exception ex)
+                catch (Exception)
                 {
-
                     throw;
                 }
-                
+
                 _tokenProvider.SetToken(loginResponseDto.Token);
                 return RedirectToAction("ImageIndex", "Image");
             }
             else
             {
-                TempData["error"] = responseDto.Message;
+                TempData["error"] = responseDto?.Message ?? "An unknown error occurred.";
                 return View(obj);
             }
         }
@@ -67,7 +73,7 @@ namespace ImgThumbnailApp.Web.Controllers
         [HttpPost]
         public async Task<IActionResult> Register(RegisterRequestDto obj)
         {
-            ResponseDto result = await _authService.RegisterAsync(obj);
+            ResponseDto? result = await _authService.RegisterAsync(obj);
 
 
             if (result != null && result.IsSuccess)
@@ -78,9 +84,9 @@ namespace ImgThumbnailApp.Web.Controllers
             }
             else
             {
-                TempData["error"] = result.Message;
+                TempData["error"] = result?.Message ?? "An unknown error occurred.";
             }
-         
+
             return View(obj);
         }
 
@@ -89,7 +95,7 @@ namespace ImgThumbnailApp.Web.Controllers
         {
             await HttpContext.SignOutAsync();
             _tokenProvider.ClearToken();
-            
+
             return RedirectToAction("Login", "Auth");
         }
 
@@ -102,17 +108,17 @@ namespace ImgThumbnailApp.Web.Controllers
 
             var identity = new ClaimsIdentity(CookieAuthenticationDefaults.AuthenticationScheme);
             identity.AddClaim(new Claim(JwtRegisteredClaimNames.Email,
-                jwt.Claims.FirstOrDefault(u => u.Type == JwtRegisteredClaimNames.Email).Value));
+                jwt.Claims.FirstOrDefault(u => u.Type == JwtRegisteredClaimNames.Email)?.Value ?? string.Empty));
             identity.AddClaim(new Claim(JwtRegisteredClaimNames.Sub,
-                jwt.Claims.FirstOrDefault(u => u.Type == JwtRegisteredClaimNames.Sub).Value));
+                jwt.Claims.FirstOrDefault(u => u.Type == JwtRegisteredClaimNames.Sub)?.Value ?? string.Empty));
             identity.AddClaim(new Claim(JwtRegisteredClaimNames.Name,
-                jwt.Claims.FirstOrDefault(u => u.Type == JwtRegisteredClaimNames.Name).Value));
+                jwt.Claims.FirstOrDefault(u => u.Type == JwtRegisteredClaimNames.Name)?.Value ?? string.Empty));
 
 
             identity.AddClaim(new Claim(ClaimTypes.Name,
-                jwt.Claims.FirstOrDefault(u => u.Type == JwtRegisteredClaimNames.Email).Value));
+                jwt.Claims.FirstOrDefault(u => u.Type == JwtRegisteredClaimNames.Email)?.Value ?? string.Empty));
             //identity.AddClaim(new Claim(ClaimTypes.Role,
-            //    jwt.Claims.FirstOrDefault(u => u.Type == "role").Value));
+            //    jwt.Claims.FirstOrDefault(u => u.Type == "role")?.Value ?? string.Empty));
 
 
 

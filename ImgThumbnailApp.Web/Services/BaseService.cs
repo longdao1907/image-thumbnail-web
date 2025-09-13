@@ -54,7 +54,7 @@ namespace ImgThumbnailApp.Web.Services
                     }
                     else
                     {
-                        content.Add(new StringContent(value == null ? "" : value.ToString()), prop.Name);
+                        content.Add(new StringContent(value?.ToString() ?? ""), prop.Name);
                     }
                 }
                 message.Content = content;
@@ -109,7 +109,7 @@ namespace ImgThumbnailApp.Web.Services
                     default:
                         var apiContent = await apiResponse.Content.ReadAsStringAsync();
                         var apiResponseDto = JsonSerializer.Deserialize<ResponseDto>(apiContent, new JsonSerializerOptions { PropertyNameCaseInsensitive = true });
-                        return apiResponseDto;
+                        return apiResponseDto ?? new ResponseDto { IsSuccess = false, Message = "Received null response from API." };
                 }
             }
             catch (Exception ex)

@@ -3,8 +3,8 @@
     public class SD
     {
 
-        public static string ImageAPIBase { get; set; }
-        public static string AuthAPIBase { get; set; }
+        public static string ImageAPIBase { get; set; } = string.Empty;
+        public static string AuthAPIBase { get; set; } = string.Empty;
         public const string TokenCookie = "JWTToken";
         public enum ApiType
         {

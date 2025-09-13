@@ -14,10 +14,10 @@ builder.Services.AddHttpClient<IImageService, ImageService>();
 builder.Services.AddHttpClient<IAuthService, AuthService>();
 
 
-SD.ImageAPIBase = builder.Configuration["ServiceUrls:ImageAPI"];
-SD.AuthAPIBase = builder.Configuration["ServiceUrls:AuthAPI"];
+SD.ImageAPIBase = builder.Configuration["ServiceUrls:ImageAPI"]!;
+SD.AuthAPIBase = builder.Configuration["ServiceUrls:AuthAPI"]!;
 
-builder.Services.AddScoped<IBaseService, BaseService>();    
+builder.Services.AddScoped<IBaseService, BaseService>();
 builder.Services.AddScoped<IImageService, ImageService>();
 builder.Services.AddScoped<IAuthService, AuthService>();
 builder.Services.AddScoped<ITokenProvider, TokenProvider>();
