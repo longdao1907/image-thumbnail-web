@@ -52,7 +52,7 @@ namespace ImgThumbnailApp.Web.Controllers
             var metadata = new ImageMetadataDto
             {
                 Id = Guid.NewGuid(),
-                FileName = $"{Path.GetFileName(file.FileName)}_{DateTime.UtcNow.AddHours(7).ToString("yyyyMMddHHmmss")}",
+                FileName = $"{Path.GetFileNameWithoutExtension(file.FileName)}_{DateTime.UtcNow.AddHours(7).ToString("yyyyMMddHHmmss")}{Path.GetExtension(file.FileName)}",
                 FileSize = file.Length,
                 UploadDate = DateTime.UtcNow.ToUniversalTime(),
                 ContentType = file.ContentType,
