@@ -8,7 +8,8 @@ namespace ImgThumbnailApp.Web.Services.IServices
         Task<ResponseDto> GetImagesForUserAsync(string userId);
         Task<ResponseDto> GetImagesAsync();
         Task UpdateImageAsync(ImageMetadataDto imageMetadata);
+        Task<ResponseDto> DownloadThumbnailAsync(Guid imageId, Stream destination);
 
-       
+
     }
 }

@@ -37,7 +37,7 @@ namespace ImgThumbnailApp.Web.Services
 
             message.RequestUri = new Uri(requestDto.Url);
 
-            if (requestDto.ContentType == Utilities.SD.ContentType.MultipartFormData)
+            if (requestDto.ContentType == Utilities.SD.ContentType.MultipartFormData && requestDto.Data != null)
             {
                 var content = new MultipartFormDataContent();
 
@@ -67,8 +67,6 @@ namespace ImgThumbnailApp.Web.Services
                 }
             }
 
-
-
             HttpResponseMessage? apiResponse = null;
 
             switch (requestDto.ApiType)
@@ -87,9 +85,7 @@ namespace ImgThumbnailApp.Web.Services
                     break;
             }
 
-
             apiResponse = await client.SendAsync(message);
-
 
             var raw = await apiResponse.Content.ReadAsStringAsync();
             try

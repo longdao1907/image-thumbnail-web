@@ -19,7 +19,7 @@
 		<table class="table">
 			<thead>
 				<tr>
-					
+
 					<th>
 						File Name
 					</th>
@@ -30,34 +30,35 @@
 						Upload Date
 					</th>
 					<th>
-						Thumbnail Status
+						Status
 					</th>
 					<th>
-						Thumbnail Download
+						Download
 					</th>
 				</tr>
 			</thead>
 			<tbody>
 				@foreach (var item in Model)
 				{
-				<tr>
-					<td> @item.FileName
-					</td>
-					<td> @item.FileSize
-					</td>
-					<td>
-                            @item.UploadDate.ToString("yyyy-MM-dd HH:mm:ss")
-					</td>
-					<td>	
-						@item.Status
-					</td>
-					<td>
-						@if(item.Status == "Completed")
-						{
-							<a asp-action="DownloadThumbnail" asp-route-id="@item.Id" class="btn btn-outline-success"><i class="bi bi-download"></i> Download</a>
-                            }	
-					</td>
-				</tr>
+					<tr>
+						<td> @item.FileName
+						</td>
+						<td> @item.FileSize
+						</td>
+						<td>
+							@item.UploadDate.ToString("yyyy-MM-dd HH:mm:ss")
+						</td>
+						<td>
+							@item.Status
+						</td>
+						<td>
+							@if (item.Status == "Completed")
+							{
+								<a asp-action="DownloadThumbnail" asp-route-id="@item.Id" class="btn btn-outline-success"><i
+										class="bi bi-download"></i></a>
+							}
+						</td>
+					</tr>
 				}
 			</tbody>
 		</table>

@@ -13,7 +13,7 @@ using System.Reflection;
 [assembly: System.Reflection.AssemblyCompanyAttribute("ImgThumbnailApp.Web")]
 [assembly: System.Reflection.AssemblyConfigurationAttribute("Debug")]
 [assembly: System.Reflection.AssemblyFileVersionAttribute("1.0.0.0")]
-[assembly: System.Reflection.AssemblyInformationalVersionAttribute("1.0.0+ec0388b598bfa2eb17473bcfeda96df4f6d9e8c2")]
+[assembly: System.Reflection.AssemblyInformationalVersionAttribute("1.0.0+d22502f9cad1df8c517ccc5040e9561760c1f5aa")]
 [assembly: System.Reflection.AssemblyProductAttribute("ImgThumbnailApp.Web")]
 [assembly: System.Reflection.AssemblyTitleAttribute("ImgThumbnailApp.Web")]
 [assembly: System.Reflection.AssemblyVersionAttribute("1.0.0.0")]

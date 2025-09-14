@@ -52,7 +52,7 @@ namespace ImgThumbnailApp.Web.Controllers
             var metadata = new ImageMetadataDto
             {
                 Id = Guid.NewGuid(),
-                FileName = Path.GetFileName(file.FileName),
+                FileName = $"{Path.GetFileName(file.FileName)}_{DateTime.UtcNow.AddHours(7).ToString("yyyyMMddHHmmss")}",
                 FileSize = file.Length,
                 UploadDate = DateTime.UtcNow.ToUniversalTime(),
                 ContentType = file.ContentType,
@@ -73,6 +73,37 @@ namespace ImgThumbnailApp.Web.Controllers
 
             TempData["success"] = "Successfully Uploaded";
             return RedirectToAction(nameof(ImageIndex));
+        }
+
+        [HttpGet]
+        public async Task<IActionResult> DownloadThumbnail(Guid imageId)
+        {
+            if (imageId == Guid.Empty)
+            {
+                TempData["error"] = "Invalid Image Information";
+                return BadRequest();
+            }
+
+            var memoryStream = new MemoryStream();
+            var response = await _imageService.DownloadThumbnailAsync(imageId, memoryStream);
+
+            if (response == null || !response.IsSuccess)
+            {
+                TempData["error"] = "Thumbnail not found or could not be downloaded.";
+                return NotFound();
+            }
+
+            var downloadDto = JsonSerializer.Deserialize<DownloadThumbnailDto>(Convert.ToString(response.Result) ?? string.Empty, new JsonSerializerOptions { PropertyNameCaseInsensitive = true });
+
+            if (downloadDto == null || downloadDto.ThumbnailStream == null || downloadDto.ThumbnailStream.Length == 0)
+            {
+                TempData["error"] = "Thumbnail not found or could not be downloaded.";
+                return NotFound("");
+            }
+
+            downloadDto.ThumbnailStream.Position = 0; // Reset stream position before returning
+            TempData["success"] = "Thumbnail downloaded successfully.";
+            return File(downloadDto.ThumbnailStream, downloadDto.ContentType, $"{imageId}_thumbnail");
         }
     }
 }

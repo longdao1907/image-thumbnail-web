@@ -51,6 +51,18 @@ namespace ImgThumbnailApp.Web.Services
                 Url = Utilities.SD.ImageAPIBase + "/api/Image/update-image"
             });
         }
+
+        public async Task<ResponseDto> DownloadThumbnailAsync(Guid imageId, Stream destination)
+        {
+            return await _baseService.SendAsync(new RequestDto()
+            {
+                ApiType = Utilities.SD.ApiType.GET,
+                Url = Utilities.SD.ImageAPIBase + "/api/Image/download-thumbnail/" + imageId
+            });
+
+        }
+
+
     }
 
 }
