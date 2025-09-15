@@ -5,6 +5,7 @@ namespace ImgThumbnailApp.Web.Services.IServices
     public interface IBaseService
     {
         Task<ResponseDto> SendAsync(RequestDto requestDto, bool withBearer = true);
+        Task<FileDownloadDto?> DownloadFileAsync(RequestDto requestDto, bool withBearer = true);
 
     }
 }

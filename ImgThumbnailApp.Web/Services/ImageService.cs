@@ -52,14 +52,16 @@ namespace ImgThumbnailApp.Web.Services
             });
         }
 
-        public async Task<ResponseDto> DownloadThumbnailAsync(Guid imageId, Stream destination)
+        public async Task<FileDownloadDto> DownloadThumbnailAsync(Guid imageId)
         {
-            return await _baseService.SendAsync(new RequestDto()
+            var result = await _baseService.DownloadFileAsync(new RequestDto()
             {
                 ApiType = Utilities.SD.ApiType.GET,
-                Url = Utilities.SD.ImageAPIBase + "/api/Image/download-thumbnail/" + imageId
+                Url = Utilities.SD.ImageAPIBase + "/api/Image/download-thumbnail/" + imageId,
+                ContentType = SD.ContentType.MultipartFormData
             });
 
+            return result ?? throw new Exception("Could not download file.");
         }
 
 

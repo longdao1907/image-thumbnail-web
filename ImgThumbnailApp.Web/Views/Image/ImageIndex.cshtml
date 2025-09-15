@@ -54,8 +54,8 @@
 						<td>
 							@if (item.Status == "Completed")
 							{
-								<a asp-action="DownloadThumbnail" asp-route-id="@item.Id" class="btn btn-outline-success"><i
-										class="bi bi-download"></i></a>
+								<a asp-action="DownloadThumbnail" asp-controller="Image" asp-route-imageId="@item.Id"
+									class="btn btn-outline-success"><i class="bi bi-download"></i></a>
 							}
 						</td>
 					</tr>

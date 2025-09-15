@@ -81,29 +81,18 @@ namespace ImgThumbnailApp.Web.Controllers
             if (imageId == Guid.Empty)
             {
                 TempData["error"] = "Invalid Image Information";
-                return BadRequest();
+                return RedirectToAction(nameof(ImageIndex));
             }
 
-            var memoryStream = new MemoryStream();
-            var response = await _imageService.DownloadThumbnailAsync(imageId, memoryStream);
+            var fileDownloadDto = await _imageService.DownloadThumbnailAsync(imageId);
 
-            if (response == null || !response.IsSuccess)
+            if (fileDownloadDto?.FileStream != null)
             {
-                TempData["error"] = "Thumbnail not found or could not be downloaded.";
-                return NotFound();
+                // 2. Return the stream received from the API as a new File result to the browser
+                return File(fileDownloadDto.FileStream, fileDownloadDto.ContentType, fileDownloadDto.FileName);
             }
 
-            var downloadDto = JsonSerializer.Deserialize<DownloadThumbnailDto>(Convert.ToString(response.Result) ?? string.Empty, new JsonSerializerOptions { PropertyNameCaseInsensitive = true });
-
-            if (downloadDto == null || downloadDto.ThumbnailStream == null || downloadDto.ThumbnailStream.Length == 0)
-            {
-                TempData["error"] = "Thumbnail not found or could not be downloaded.";
-                return NotFound("");
-            }
-
-            downloadDto.ThumbnailStream.Position = 0; // Reset stream position before returning
-            TempData["success"] = "Thumbnail downloaded successfully.";
-            return File(downloadDto.ThumbnailStream, downloadDto.ContentType, $"{imageId}_thumbnail");
+            return NotFound();
         }
     }
 }

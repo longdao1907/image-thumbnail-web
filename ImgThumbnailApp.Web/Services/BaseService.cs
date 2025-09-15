@@ -121,6 +121,50 @@ namespace ImgThumbnailApp.Web.Services
             }
 
         }
+
+        public async Task<FileDownloadDto?> DownloadFileAsync(RequestDto requestDto, bool withBearer = true)
+        {
+            HttpClient client = _httpClientFactory.CreateClient("ImgThumbnailAppAPI");
+            HttpRequestMessage message = new HttpRequestMessage();
+
+            message.Headers.Add("Accept", "*/*");
+
+            //token
+            if (withBearer)
+            {
+                var token = _tokenProvider.GetToken();
+                message.Headers.Add("Authorization", $"Bearer {token}");
+            }
+
+            message.RequestUri = new Uri(requestDto.Url);
+
+            message.Method = HttpMethod.Get;
+
+            HttpResponseMessage? apiResponse = null;
+
+            apiResponse = await client.SendAsync(message);
+
+            if (apiResponse.IsSuccessStatusCode)
+            {
+                var contentStream = await apiResponse.Content.ReadAsStreamAsync();
+                var contentType = apiResponse.Content.Headers.ContentType?.MediaType ?? "application/octet-stream";
+                var fileName = apiResponse.Content.Headers.ContentDisposition?.FileName?.Trim('"') ?? "downloaded_file";
+
+                return new FileDownloadDto
+                {
+                    FileName = fileName,
+                    ContentType = contentType,
+                    FileStream = contentStream
+                };
+            }
+            else
+            {
+                return null;
+            }
+        }
+
     }
+
+
 }
 
